@@ -1,0 +1,30 @@
+<%= form_for(@person) do |f| %>
+  <% if @person.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@person.errors.count, "error") %> prohibited this person from being saved:</h2>
+
+      <ul>
+      <% @person.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :state_id %><br>
+    <%= collection_select(:state, :id, State.all, :id, :name, {:prompt => true})  %>
+    <%= observe_field('state_id', :frequency => 0.25, :update => 'cities_div', :url => {:action => :load_cities}, :with => "'state_id='+value") %>
+  </div>
+  <div class="field">
+    <%= f.label :city_id %><br>
+    <div id='cities_div'></div
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
